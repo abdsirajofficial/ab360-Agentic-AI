@@ -1,0 +1,20 @@
+# Tauri Build Outputs
+/target
+/gen
+
+# Tauri Config
+WixTools
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log

@@ -21,9 +21,6 @@
     ],
     "resources": [
       "../backend/dist/ab360-backend.exe"
-    ],
-    "externalBin": [
-      "binaries/ab360-backend"
     ]
   },
   "app": {
