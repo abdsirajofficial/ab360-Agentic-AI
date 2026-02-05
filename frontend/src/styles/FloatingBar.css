@@ -1,0 +1,87 @@
+.floating-bar {
+  position: fixed;
+  width: 400px;
+  height: 56px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04), 0 4px 16px rgba(0, 0, 0, 0.06);
+  cursor: move;
+  user-select: none;
+  z-index: 9999;
+  transition: box-shadow 0.2s ease;
+}
+
+.floating-bar:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08), 0 8px 24px rgba(0, 0, 0, 0.10);
+}
+
+.floating-bar.dragging {
+  cursor: grabbing;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 16px 48px rgba(0, 0, 0, 0.16);
+}
+
+.bar-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  height: 100%;
+}
+
+.bar-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.bar-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.bar-actions {
+  display: flex;
+  gap: 8px;
+  cursor: default;
+}
+
+.bar-button {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: #F3F4F6;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #4B5563;
+  transition: all 0.2s ease;
+}
+
+.bar-button:hover {
+  background: #E5E7EB;
+  color: #2563EB;
+}
+
+.bar-button:active {
+  transform: scale(0.95);
+}
+
+.drag-indicator {
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 4px;
+  opacity: 0.3;
+}
+
+.drag-indicator span {
+  width: 4px;
+  height: 4px;
+  background: #9CA3AF;
+  border-radius: 50%;
+}
