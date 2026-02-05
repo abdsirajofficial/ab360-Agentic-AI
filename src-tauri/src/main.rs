@@ -2,6 +2,11 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 use tauri::{CustomMenuItem, Manager, SystemTray, SystemTrayEvent, SystemTrayMenu};
+use std::process::{Child, Command};
+use std::sync::Mutex;
+
+// Store backend process
+struct BackendProcess(Mutex<Option<Child>>);
 
 fn main() {
     // Create system tray
@@ -16,6 +21,13 @@ fn main() {
     let system_tray = SystemTray::new().with_menu(tray_menu);
 
     tauri::Builder::default()
+        .setup(|app| {
+            // Start Python backend
+            let backend_process = start_backend(app.handle());
+            app.manage(BackendProcess(Mutex::new(backend_process)));
+            
+            Ok(())
+        })
         .system_tray(system_tray)
         .on_system_tray_event(|app, event| match event {
             SystemTrayEvent::LeftClick {
@@ -29,6 +41,11 @@ fn main() {
             }
             SystemTrayEvent::MenuItemClick { id, .. } => match id.as_str() {
                 "quit" => {
+                    // Kill backend before quitting
+                    let state = app.state::<BackendProcess>();
+                    if let Some(mut child) = state.0.lock().unwrap().take() {
+                        let _ = child.kill();
+                    }
                     std::process::exit(0);
                 }
                 "hide" => {
@@ -57,6 +74,45 @@ fn main() {
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
+}
+
+fn start_backend(app_handle: tauri::AppHandle) -> Option<Child> {
+    #[cfg(debug_assertions)]
+    {
+        // In development, don't start backend (assume it's running separately)
+        println!("🔧 Development mode: Backend should be running separately on port 8000");
+        return None;
+    }
+
+    #[cfg(not(debug_assertions))]
+    {
+        // In production, start bundled backend
+        use tauri::api::path::resource_dir;
+        
+        let package_info = app_handle.package_info();
+        let resource_path = resource_dir(package_info, &app_handle.env())
+            .expect("failed to resolve resource directory");
+        
+        let backend_path = resource_path.join("ab360-backend.exe");
+        
+        println!("🚀 Starting backend from: {:?}", backend_path);
+
+        match Command::new(backend_path)
+            .spawn() {
+            Ok(child) => {
+                println!("✅ Backend started with PID: {}", child.id());
+                
+                // Wait a moment for backend to start
+                std::thread::sleep(std::time::Duration::from_secs(2));
+                
+                Some(child)
+            }
+            Err(e) => {
+                eprintln!("❌ Failed to start backend: {}", e);
+                None
+            }
+        }
+    }
 }
 
 #[tauri::command]

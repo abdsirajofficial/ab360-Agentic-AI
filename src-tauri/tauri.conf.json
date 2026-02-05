@@ -1,8 +1,8 @@
 {
   "build": {
     "beforeDevCommand": "cd ../frontend && npm run dev",
-    "beforeBuildCommand": "cd ../frontend && npm run build",
-    "devPath": "http://localhost:3000",
+    "beforeBuildCommand": "cd ../frontend && npm run build && cd ../backend && poetry run pyinstaller ab360_backend.spec --clean",
+    "devPath": "http://localhost:5173",
     "distDir": "../frontend/dist",
     "withGlobalTauri": false
   },
@@ -15,7 +15,8 @@
       "all": false,
       "shell": {
         "all": false,
-        "open": true
+        "open": true,
+        "sidecar": true
       },
       "window": {
         "all": false,
@@ -43,6 +44,12 @@
         "icons/128x128@2x.png",
         "icons/icon.icns",
         "icons/icon.ico"
+      ],
+      "resources": [
+        "../backend/dist/ab360-backend.exe"
+      ],
+      "externalBin": [
+        "binaries/ab360-backend"
       ]
     },
     "security": {
