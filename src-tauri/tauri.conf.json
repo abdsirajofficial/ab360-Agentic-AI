@@ -1,71 +1,52 @@
 {
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "ab360",
+  "version": "0.1.0",
+  "identifier": "com.ab360.app",
   "build": {
-    "beforeDevCommand": "cd ../frontend && npm run dev",
-    "beforeBuildCommand": "cd ../frontend && npm run build && cd ../backend && poetry run pyinstaller ab360_backend.spec --clean",
-    "devPath": "http://localhost:5173",
-    "distDir": "../frontend/dist",
-    "withGlobalTauri": false
+    "beforeDevCommand": "cd D:\\Gen_AI_Poc\\ab360\\frontend && npm run dev",
+    "devUrl": "http://localhost:5173",
+    "beforeBuildCommand": "cd D:\\Gen_AI_Poc\\ab360\\frontend && npm run build && cd D:\\Gen_AI_Poc\\ab360\\backend && poetry run pyinstaller ab360_backend.spec --clean",
+    "frontendDist": "../frontend/dist"
   },
-  "package": {
-    "productName": "ab360",
-    "version": "0.1.0"
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+    "resources": [
+      "../backend/dist/ab360-backend.exe"
+    ],
+    "externalBin": [
+      "binaries/ab360-backend"
+    ]
   },
-  "tauri": {
-    "allowlist": {
-      "all": false,
-      "shell": {
-        "all": false,
-        "open": true,
-        "sidecar": true
-      },
-      "window": {
-        "all": false,
-        "close": true,
-        "hide": true,
-        "show": true,
-        "maximize": true,
-        "minimize": true,
-        "unmaximize": true,
-        "unminimize": true,
-        "startDragging": true,
-        "setAlwaysOnTop": true
-      },
-      "globalShortcut": {
-        "all": true
-      }
-    },
-    "bundle": {
-      "active": true,
-      "targets": "all",
-      "identifier": "com.ab360.app",
-      "icon": [
-        "icons/32x32.png",
-        "icons/128x128.png",
-        "icons/128x128@2x.png",
-        "icons/icon.icns",
-        "icons/icon.ico"
-      ],
-      "resources": [
-        "../backend/dist/ab360-backend.exe"
-      ],
-      "externalBin": [
-        "binaries/ab360-backend"
-      ]
-    },
-    "security": {
-      "csp": null
-    },
+  "app": {
     "windows": [
       {
-        "fullscreen": false,
-        "resizable": true,
         "title": "ab360",
         "width": 800,
         "height": 600,
+        "resizable": true,
+        "fullscreen": false,
         "decorations": false,
         "transparent": true,
         "alwaysOnTop": true
       }
-    ]
+    ],
+    "security": {
+      "csp": null
+    }
+  },
+  "plugins": {
+    "shell": {
+      "open": true,
+      "sidecar": true
+    }
   }
 }
